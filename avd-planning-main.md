@@ -15,6 +15,12 @@ profile migration, licensing, clients, SLA
 
 In order to ensure your Azure Virtual Desktop solution meets your needs, it is recommended to consider the user requirements and needs in conjunction with the available features and components of Azure. This guide should provide you with some of the initial planning steps as you plan out and design your Azure Virtual Desktop deployment and solution.  
 
+## Prerequisites
+
+Azure AD Tenant  
+Subscription  
+Virtual Network Infrastructure  
+
 ## Identity  
 
 **Same Cloud and Tenant is Ideal**  
@@ -73,12 +79,29 @@ Most importantly, your network configuration and infrastructure is vital to a su
 
 ## Applications
 
-Group by User Roles
-Updates
-- No Automatic Updates
-- Image or Post Deployment
-MSIX App Attach
+**Group by User Roles**  
+Try to consider the user types and role they may have to group applications. This will help you define what might be a Host Pool for AVD.  
 
+**Updates**  
+
+- Disable Automatic Updates where possible on Pooled or multi-session for applications and Windows Update.
+- Apply within Image or Post Deployment? Depending on the number of updates and applications, this may drive whether or not you have a need to manage an image or simply incorporate a post configuration script on top of the Microsoft provided image.
+
+**MSIX App Attach**  
+This option provides a way to virtualize applications and separate them from the Desktop or Operating System.
+
+- Provides mechanism for keeping the image free of installed software and possibly not need to maintain a custom image.
+- It does require a code signing certificate and separate storage is recommended.
+- Permissions require Computer Account assignment which may not be possible with Azure AD Domain Services. (Azure NetApp Files may be workaround)
+- Application management requires different tools and strategy but more centralized.
+
+**FSLogix App Masking**  
+Provides mechanism to hide applications for specific users based on group membership.  Ideally for when you have only a small subset that you don't want to have access to an application that is installed.
+
+**Remote Apps or Full Desktop**  
+
+Full Desktop: Best for when the users will need to use multiple applications that may interact with each other. For example the Office Suite of applications.  
+Remote Apps: Typically used in scenarios where users just need a single application or when applications need more robust VMs that you want to limit used to minimize cost but provide the best user experience only when those apps are needed.  
 
 ## Management
 
